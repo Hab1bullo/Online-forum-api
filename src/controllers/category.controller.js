@@ -59,6 +59,25 @@ export const getone = async (req, res) => {
     }
 }
 
+export const getAll = async (req, res) => {
+    try {
+        
+        const categorys = await Category.findAll();
+
+        return res.status(200).send({
+            message: "OK",
+            categorys: categorys
+        });
+
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send({
+            message: "Serverda xatolik",
+            error: e
+        });
+    }
+}
+
 
 export const updateOne = async (req, res) => {
     try {
@@ -82,6 +101,43 @@ export const updateOne = async (req, res) => {
             category: category
         });
 
+
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send({
+            message: "Serverda xatolik",
+            error: e
+        });
+    }
+}
+
+
+export const deleteOne = async (req, res) => {
+    try {
+            
+        const { id } = req.params;
+
+        const category = await Category.findOne({
+            where: {
+                id: id
+            }
+        });
+        if(!category){
+            return res.status(200).send({
+                message: "Category not found",
+            });
+        }
+
+        const result = await Category.destroy({
+            where: {
+                id: id
+            }
+        });
+
+        return res.status(200).send({
+            message: "Category deleted",
+            result: result
+        });
 
     } catch (e) {
         console.log(e);
